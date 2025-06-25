@@ -7,3 +7,4 @@ class JobStatus(Enum):
     RunningAfterDecorators = "RunningAfterDecorators"
     Failed = "Failed"
     ErrorThrown = "ErrorThrown"
+    TimedOut = "TimedOut"
