@@ -55,7 +55,7 @@ def build_job_handler(task_function: Function[..., Any], task_config: TaskConfig
 
 def prepare_task_function(task_function: Function[P, R], task_config: TaskConfig) -> DictFunction[P]:
     if not is_async_function(task_function):
-        task_function = asyncify(task_function)
+        task_function = asyncify(task_function, task_config.timeout_ms)
 
     if task_config.single_value:
         return convert_to_dict_function(task_function, task_config.variable_name)

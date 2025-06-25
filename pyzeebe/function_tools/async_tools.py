@@ -23,11 +23,12 @@ def asyncify_all_functions(functions: Iterable[Function[..., Any]]) -> list[Asyn
     return async_functions
 
 
-def asyncify(task_function: SyncFunction[P, R]) -> AsyncFunction[P, R]:
+def asyncify(task_function: SyncFunction[P, R], timeout_ms: int) -> AsyncFunction[P, R]:
     @functools.wraps(task_function)
     async def async_function(*args: P.args, **kwargs: P.kwargs) -> R:
         loop = asyncio.get_event_loop()
-        return await loop.run_in_executor(None, functools.partial(task_function, *args, **kwargs))
+        future = loop.run_in_executor(None, functools.partial(task_function, *args, **kwargs))
+        return await asyncio.wait_for(future, timeout_ms)
 
     return async_function
 
